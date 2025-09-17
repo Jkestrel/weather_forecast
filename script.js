@@ -35,3 +35,16 @@ function formatTemp(k, today = false) {
   if (today && isFahrenheit) return `${(c*9/5+32).toFixed(1)} °F`;
   return `${c.toFixed(1)} °C`;
 }
+
+function updateBackground(condition) {
+  const body = document.body;
+  body.className = "min-h-screen text-slate-800 font-sans";
+  // Decide background based on condition
+  const c = condition.toLowerCase();
+  if (c.includes("clear")) body.classList.add("bg-sunny");
+  else if (c.includes("cloud")) body.classList.add("bg-cloudy");
+  else if (c.includes("rain")) body.classList.add("bg-rainy");
+  else if (c.includes("thunder")) body.classList.add("bg-stormy");
+  else if (c.includes("snow")) body.classList.add("bg-snowy");
+}
+
