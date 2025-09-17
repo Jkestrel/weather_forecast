@@ -1,0 +1,47 @@
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button, input, #message, #tempAlert {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Weather backgrounds */
+.bg-sunny  { background: linear-gradient(to bottom, #fceabb, #f8b500); }
+.bg-cloudy { background: linear-gradient(to bottom, #d7d2cc, #304352); }
+.bg-rainy  { background: linear-gradient(to bottom, #4facfe, #00f2fe); }
+.bg-stormy { background: linear-gradient(to bottom, #232526, #414345); }
+.bg-snowy  { background: linear-gradient(to bottom, #e0eafc, #cfdef3); }
+
+/* Message styles */
+#message { padding: 0.75rem 1rem; border-radius: 0.5rem; font-size: 0.9rem; font-weight: 500; }
+#message.error { background:#fee2e2; color:#991b1b; border:1px solid #fecaca; }
+#message.success { background:#dcfce7; color:#166534; border:1px solid #bbf7d0; }
+#message.info { background:#dbeafe; color:#1e3a8a; border:1px solid #bfdbfe; }
+
+/* Temp alerts */
+#tempAlert.hot { background:#fee2e2; color:#b91c1c; border:1px solid #fecaca; }
+#tempAlert.cold { background:#e0f2fe; color:#075985; border:1px solid #bae6fd; }
+
+/* Forecast cards */
+.forecast-card {
+  background:#fff;
+  border-radius:0.75rem;
+  padding:1rem;
+  text-align:center;
+  box-shadow:0 2px 6px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease;
+}
+.forecast-card:hover { transform: translateY(-3px); }
+
+/* Recent dropdown scroll */
+#recentList {
+  max-height: 200px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f8fafc;
+}
+#recentList::-webkit-scrollbar { width: 6px; }
+#recentList::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:10px; }
+#recentList::-webkit-scrollbar-track { background:#f8fafc; }
