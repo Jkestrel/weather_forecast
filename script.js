@@ -16,3 +16,11 @@ const windEl        = document.getElementById("wind");
 const feelsLikeEl   = document.getElementById("feelsLike");
 const tempAlertEl   = document.getElementById("tempAlert");
 const forecastGrid  = document.getElementById("forecastGrid");
+
+function showMessage(type, text) {
+  messageBox.className = "";
+  messageBox.classList.add(type);
+  messageBox.textContent = text;
+  messageBox.classList.remove("hidden");
+  setTimeout(() => messageBox.classList.add("hidden"), 4000);
+}
