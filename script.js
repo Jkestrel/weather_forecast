@@ -24,3 +24,14 @@ function showMessage(type, text) {
   messageBox.classList.remove("hidden");
   setTimeout(() => messageBox.classList.add("hidden"), 4000);
 }
+
+let isFahrenheit = false;
+let recentCities = JSON.parse(localStorage.getItem("recentCities")) || [];
+let lastFetched = null;
+
+const kelvinToC = k => k - 273.15;
+function formatTemp(k, today = false) {
+  const c = kelvinToC(k);
+  if (today && isFahrenheit) return `${(c*9/5+32).toFixed(1)} °F`;
+  return `${c.toFixed(1)} °C`;
+}
