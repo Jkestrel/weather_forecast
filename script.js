@@ -80,3 +80,78 @@ function renderRecents() {
   });
   recentList.classList.remove("hidden");
 }
+
+/*API*/
+async function fetchWeather(city) {
+  if (!city) return showMessage("error","Enter a city");
+  try {
+    const res=await fetch(`${BASE_URL}weather?q=${encodeURIComponent(city)}&appid=${API_KEY}`);
+    if(!res.ok) throw new Error("City not found");
+    const data=await res.json();
+    lastFetched=data;
+    updateCurrent(data);
+    saveRecent(data.name);
+    fetchForecast(data.coord.lat,data.coord.lon);
+  } catch(e){ showMessage("error",e.message);}
+}
+async function fetchWeatherByCoords(lat,lon){
+  try{
+    const res=await fetch(`${BASE_URL}weather?lat=${lat}&lon=${lon}&appid=${API_KEY}`);
+    if(!res.ok) throw new Error("Location fetch failed");
+    const data=await res.json();
+    lastFetched=data;
+    updateCurrent(data);
+    saveRecent(data.name);
+    fetchForecast(lat,lon);
+  }catch(e){showMessage("error",e.message);}
+}
+async function fetchForecast(lat,lon){
+  try{
+    const res=await fetch(`${BASE_URL}forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}`);
+    if(!res.ok) throw new Error("Forecast unavailable");
+    const data=await res.json();
+    const map={};
+    data.list.forEach(item=>{
+      const key=new Date(item.dt*1000).toLocaleDateString();
+      if(!map[key]) map[key]=item;
+    });
+    updateForecast(Object.values(map).slice(0,5));
+  }catch(e){showMessage("error",e.message);}
+}
+
+function updateCurrent(data){
+  cityNameEl.textContent=data.name;
+  const tempK=data.main.temp, feelsK=data.main.feels_like, tempC=kelvinToC(tempK);
+  currentTempEl.textContent=formatTemp(tempK,true);
+  feelsLikeEl.textContent=formatTemp(feelsK,true);
+  humidityEl.textContent=`${data.main.humidity}%`;
+  windEl.textContent=`${data.wind.speed} m/s`;
+
+  const iconCode = data.weather[0].icon;
+  const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`; // Set weather icon using OpenWeatherMap's icon code
+  weatherIconEl.innerHTML = `<img src="${iconUrl}" alt="${data.weather[0].description}" class="w-16 h-16">`;
+
+  updateBackground(data.weather[0].main);
+  handleAlerts(tempC);
+}
+function updateForecast(days){
+  forecastGrid.innerHTML="";
+  days.forEach(item=>{
+    const d=new Date(item.dt*1000);
+    const label=d.toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric"});
+    const card=document.createElement("div");
+    card.className="forecast-card";
+    card.innerHTML=`
+      <h4 class="font-semibold text-sky-700">${label}</h4>
+      <div class="my-2">
+        <img src="https://openweathermap.org/img/wn/${item.weather[0].icon}@2x.png"
+            alt="${item.weather[0].description}"
+            class="mx-auto w-12 h-12">
+      </div>
+
+      <p class="font-bold">${formatTemp(item.main.temp,false)}</p>
+      <p class="text-slate-500 text-sm">💨 ${item.wind.speed} m/s</p>
+      <p class="text-slate-500 text-sm">💧 ${item.main.humidity}%</p>`;
+    forecastGrid.appendChild(card);
+  });
+}
