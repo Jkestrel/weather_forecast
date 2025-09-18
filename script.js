@@ -155,3 +155,19 @@ function updateForecast(days){
     forecastGrid.appendChild(card);
   });
 }
+
+/*Events*/
+searchBtn.addEventListener("click",()=>fetchWeather(cityInput.value.trim()));
+cityInput.addEventListener("keydown",e=>{if(e.key==="Enter") fetchWeather(cityInput.value.trim());});
+locBtn.addEventListener("click",()=>{
+  if(!navigator.geolocation) return showMessage("error","Geolocation not supported");
+  navigator.geolocation.getCurrentPosition(p=>fetchWeatherByCoords(p.coords.latitude,p.coords.longitude),()=>showMessage("error","Location denied"));
+});
+unitToggleBtn.addEventListener("click",()=>{
+  isFahrenheit=!isFahrenheit;
+  unitToggleBtn.textContent=isFahrenheit?"Show °C":"Show °F";
+  if(lastFetched) updateCurrent(lastFetched);
+});
+recentBtn.addEventListener("click",()=>recentList.classList.toggle("hidden"));
+
+renderRecents();
