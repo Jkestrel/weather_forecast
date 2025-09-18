@@ -53,3 +53,30 @@ function handleAlerts(tempC) {
   if (tempC > 40) { tempAlertEl.textContent="⚠️ Extreme heat!"; tempAlertEl.classList.add("hot"); tempAlertEl.classList.remove("hidden"); }
   else if (tempC < 0) { tempAlertEl.textContent="❄️ Freezing conditions!"; tempAlertEl.classList.add("cold"); tempAlertEl.classList.remove("hidden"); }
 }
+
+/*Recents*/
+function saveRecent(city) {
+  if (!city) return;
+  recentCities = recentCities.filter(c => c.toLowerCase()!==city.toLowerCase());
+  recentCities.unshift(city);
+  if (recentCities.length>10) recentCities.pop();
+  localStorage.setItem("recentCities", JSON.stringify(recentCities));
+  renderRecents();
+}
+function renderRecents() {
+  recentList.innerHTML="";
+  if (!recentCities.length) { recentList.classList.add("hidden"); return; }
+  recentCities.forEach((city,i)=>{
+    const li=document.createElement("li");
+    li.className="flex justify-between items-center px-4 py-2 hover:bg-indigo-50 cursor-pointer";
+    const span=document.createElement("span");
+    span.textContent=city;
+    span.className="font-medium text-slate-700";
+    span.addEventListener("click",()=>{fetchWeather(city);recentList.classList.add("hidden");});
+    const remove=document.createElement("button");
+    remove.textContent="✕"; remove.className="text-slate-400 hover:text-red-500 text-sm";
+    remove.addEventListener("click",(e)=>{e.stopPropagation();recentCities.splice(i,1);localStorage.setItem("recentCities",JSON.stringify(recentCities));renderRecents();});
+    li.append(span,remove); recentList.appendChild(li);
+  });
+  recentList.classList.remove("hidden");
+}
