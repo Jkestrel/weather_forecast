@@ -29,3 +29,5 @@ It uses the **OpenWeatherMap API** to fetch live weather data for any city or fo
 
 ---
 ## 🔗 Github Link - https://github.com/Jkestrel
+## </> Project Link - https://github.com/Jkestrel/weather_forecast
+
