@@ -48,3 +48,8 @@ function updateBackground(condition) {
   else if (c.includes("snow")) body.classList.add("bg-snowy");
 }
 
+function handleAlerts(tempC) {
+  tempAlertEl.className = "hidden";
+  if (tempC > 40) { tempAlertEl.textContent="⚠️ Extreme heat!"; tempAlertEl.classList.add("hot"); tempAlertEl.classList.remove("hidden"); }
+  else if (tempC < 0) { tempAlertEl.textContent="❄️ Freezing conditions!"; tempAlertEl.classList.add("cold"); tempAlertEl.classList.remove("hidden"); }
+}
